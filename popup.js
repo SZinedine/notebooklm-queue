@@ -69,6 +69,8 @@ function render() {
   $("clearBtn").disabled = state.running;
   $("sampleBtn").disabled = state.running;
   $("input").disabled = state.running;
+  $("delaySec").disabled = state.running;
+  $("maxWaitMin").disabled = state.running;
 }
 
 async function checkTab() {
@@ -79,7 +81,7 @@ async function checkTab() {
     statusEl.className = "status " + (state.running ? "running" : "connected");
     return tab;
   } else {
-    statusEl.textContent = "Open Gemini Notebook";
+    statusEl.textContent = "Open NotebookLM";
     statusEl.className = "status error";
     return null;
   }
@@ -145,6 +147,14 @@ chrome.storage.onChanged.addListener((changes) => {
   if (changes.queue) state.queue = changes.queue.newValue || [];
   if (changes.running) state.running = changes.running.newValue;
   if (changes.currentIdx) state.currentIdx = changes.currentIdx.newValue;
+  if (changes.delaySec && document.activeElement !== $("delaySec")) {
+    state.delaySec = changes.delaySec.newValue ?? 3;
+    $("delaySec").value = state.delaySec;
+  }
+  if (changes.maxWaitMin && document.activeElement !== $("maxWaitMin")) {
+    state.maxWaitMin = changes.maxWaitMin.newValue ?? 10;
+    $("maxWaitMin").value = state.maxWaitMin;
+  }
   render();
   checkTab();
 });
@@ -182,6 +192,38 @@ $("input").addEventListener("keydown", e => {
     e.preventDefault();
     addPrompts();
   }
+});
+
+function handleSettingInput() {
+  const delay = parseInt($("delaySec").value, 10);
+  if (!isNaN(delay) && delay >= 0) {
+    state.delaySec = Math.min(60, delay);
+  }
+  const maxWait = parseInt($("maxWaitMin").value, 10);
+  if (!isNaN(maxWait) && maxWait >= 1) {
+    state.maxWaitMin = Math.min(30, maxWait);
+  }
+  saveState();
+}
+
+$("delaySec").addEventListener("input", handleSettingInput);
+$("delaySec").addEventListener("change", () => {
+  let val = parseInt($("delaySec").value, 10);
+  if (isNaN(val) || val < 0) val = 3;
+  val = Math.min(60, Math.max(0, val));
+  $("delaySec").value = val;
+  state.delaySec = val;
+  saveState();
+});
+
+$("maxWaitMin").addEventListener("input", handleSettingInput);
+$("maxWaitMin").addEventListener("change", () => {
+  let val = parseInt($("maxWaitMin").value, 10);
+  if (isNaN(val) || val < 1) val = 10;
+  val = Math.min(30, Math.max(1, val));
+  $("maxWaitMin").value = val;
+  state.maxWaitMin = val;
+  saveState();
 });
 
 (async () => {
