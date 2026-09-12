@@ -1,5 +1,5 @@
 // Background service worker - mostly passive, just here to keep extension lifecycle clean.
-// All real work happens in content.js running on the NotebookLM tab.
+// All real work happens in content.js running on the Gemini Notebook tab.
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.get(["queue", "running"], (data) => {

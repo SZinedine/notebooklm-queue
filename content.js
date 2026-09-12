@@ -1,4 +1,4 @@
-// Content script for NotebookLM Prompt Queue.
+// Content script for Notebook Prompt Queue.
 // Drives the CHAT panel only — explicitly avoids Sources/Discover inputs.
 
 const CHAT_PATTERNS = [
@@ -205,7 +205,7 @@ async function submitPrompt(text) {
 
   // 5. Wait for generation to END.
   // ONLY check for stop-button absence — do NOT rely on send button being enabled,
-  // because NotebookLM clears the input after sending which keeps send disabled.
+  // because Gemini Notebook clears the input after sending which keeps send disabled.
   // Use a stability window so we don't false-positive on transient stop-button removal.
   if (generationStarted) {
     const STABILITY_MS = 2000;

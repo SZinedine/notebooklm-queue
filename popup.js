@@ -74,12 +74,12 @@ function render() {
 async function checkTab() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const statusEl = $("status");
-  if (tab && tab.url && tab.url.startsWith("https://notebooklm.google.com/")) {
+  if (tab && tab.url && tab.url.startsWith("https://notebook.google.com/")) {
     statusEl.textContent = state.running ? "Running…" : "Connected";
     statusEl.className = "status " + (state.running ? "running" : "connected");
     return tab;
   } else {
-    statusEl.textContent = "Open NotebookLM";
+    statusEl.textContent = "Open Gemini Notebook";
     statusEl.className = "status error";
     return null;
   }
@@ -107,7 +107,7 @@ function clearAll() {
 async function startQueue() {
   const tab = await checkTab();
   if (!tab) {
-    alert("Open a NotebookLM notebook in this tab first.");
+    alert("Open a notebook in this tab first.");
     return;
   }
   state.delaySec = parseInt($("delaySec").value) || 3;
@@ -125,7 +125,7 @@ async function startQueue() {
       state.running = false;
       saveState();
       render();
-      alert("Couldn't reach NotebookLM tab. Reload the NotebookLM page and try again.");
+      alert("Couldn't reach Gemini Notebook tab. Reload the Gemini Notebook page and try again.");
     }
   });
 }
