@@ -16,7 +16,7 @@ Gemini Notebook has no public API, so this is the next best thing: it drives the
 
 1. Open a notebook in Gemini Notebook
 2. Click the extension icon
-3. Paste prompts — separate multiple with a blank line or `---`
+3. Paste prompts — separate multiple with `---`
 4. Click **Start queue**
 5. Keep the Notebook tab visible (don't minimize the window — Chrome throttles background tabs, which breaks the completion polling)
 

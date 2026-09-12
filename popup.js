@@ -90,7 +90,7 @@ async function checkTab() {
 function addPrompts() {
   const raw = $("input").value.trim();
   if (!raw) return;
-  const parts = raw.split(/\n\s*(?:---+)?\s*\n/).map(s => s.trim()).filter(Boolean);
+  const parts = raw.split(/(?:^|\r?\n)\s*---+[^\S\r\n]*(?:\r?\n|$)/).map(s => s.trim()).filter(Boolean);
   parts.forEach(text => state.queue.push({ text, status: "pending" }));
   $("input").value = "";
   saveState();
