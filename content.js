@@ -288,6 +288,13 @@ async function runQueue() {
 
       await chrome.storage.local.set({ queue });
       if (shouldStop) break;
+
+      const hasNext = queue.some(q => q.status === "pending");
+      if (!hasNext) {
+        console.log("[NBLM Queue] No more pending prompts.");
+        break;
+      }
+
       console.log(`[NBLM Queue] Sleeping ${config.delayMs}ms before next prompt.`);
       await sleep(config.delayMs);
     }
